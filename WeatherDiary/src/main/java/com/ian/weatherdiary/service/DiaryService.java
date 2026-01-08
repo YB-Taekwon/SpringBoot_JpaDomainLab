@@ -2,6 +2,7 @@ package com.ian.weatherdiary.service;
 
 import com.ian.weatherdiary.domain.Diary;
 import com.ian.weatherdiary.dto.request.DiaryCreateRequest;
+import com.ian.weatherdiary.dto.request.DiaryDeleteRequest;
 import com.ian.weatherdiary.dto.request.DiaryReadRequest;
 import com.ian.weatherdiary.dto.request.DiaryUpdateRequest;
 import com.ian.weatherdiary.dto.response.DiaryReadResponse;
@@ -64,5 +65,10 @@ public class DiaryService {
     private Diary findDiaryById(Long diaryId) {
         return diaryRepository.findById(diaryId)
                 .orElseThrow(() -> new IllegalArgumentException("Diary not found"));
+    }
+
+    @Transactional
+    public void delete(DiaryDeleteRequest request) {
+        diaryRepository.deleteAllById(request.getDiaryIds());
     }
 }

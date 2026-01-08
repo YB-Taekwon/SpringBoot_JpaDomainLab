@@ -1,6 +1,7 @@
 package com.ian.weatherdiary.controller;
 
 import com.ian.weatherdiary.dto.request.DiaryCreateRequest;
+import com.ian.weatherdiary.dto.request.DiaryDeleteRequest;
 import com.ian.weatherdiary.dto.request.DiaryReadRequest;
 import com.ian.weatherdiary.dto.request.DiaryUpdateRequest;
 import com.ian.weatherdiary.service.DiaryService;
@@ -44,6 +45,13 @@ public class DiaryController {
     @PatchMapping("/{diaryId}")
     public ResponseEntity<?> update(@PathVariable Long diaryId, @Valid @RequestBody DiaryUpdateRequest request) {
         diaryService.update(diaryId, request);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping
+    public ResponseEntity<?> delete(@RequestBody DiaryDeleteRequest request) {
+        diaryService.delete(request);
 
         return ResponseEntity.ok().build();
     }

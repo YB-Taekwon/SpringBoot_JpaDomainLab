@@ -2,6 +2,7 @@ package com.ian.weatherdiary.controller;
 
 import com.ian.weatherdiary.dto.request.DiaryCreateRequest;
 import com.ian.weatherdiary.dto.request.DiaryReadRequest;
+import com.ian.weatherdiary.dto.request.DiaryUpdateRequest;
 import com.ian.weatherdiary.service.DiaryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -33,5 +34,17 @@ public class DiaryController {
     @PostMapping("/list")
     public ResponseEntity<?> readDiaries(@Valid @RequestBody DiaryReadRequest request) {
         return ResponseEntity.ok().body(diaryService.readDiaries(request));
+    }
+
+    @GetMapping("/{diaryId}")
+    public ResponseEntity<?> readDiary(@PathVariable Long diaryId) {
+        return ResponseEntity.ok().body(diaryService.readDiary(diaryId));
+    }
+
+    @PatchMapping("/{diaryId}")
+    public ResponseEntity<?> update(@PathVariable Long diaryId, @Valid @RequestBody DiaryUpdateRequest request) {
+        diaryService.update(diaryId, request);
+
+        return ResponseEntity.ok().build();
     }
 }

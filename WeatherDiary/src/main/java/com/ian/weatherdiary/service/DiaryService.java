@@ -44,4 +44,11 @@ public class DiaryService {
 
         return diaries.stream().map(DiaryReadResponse::from).toList();
     }
+
+    public DiaryReadResponse readDiary(Long diaryId) {
+        Diary diary = diaryRepository.findById(diaryId)
+                .orElseThrow(() -> new IllegalArgumentException("Diary not found"));
+
+        return DiaryReadResponse.from(diary);
+    }
 }

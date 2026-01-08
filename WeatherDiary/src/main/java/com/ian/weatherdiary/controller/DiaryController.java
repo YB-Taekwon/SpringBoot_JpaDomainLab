@@ -34,4 +34,9 @@ public class DiaryController {
     public ResponseEntity<?> readDiaries(@Valid @RequestBody DiaryReadRequest request) {
         return ResponseEntity.ok().body(diaryService.readDiaries(request));
     }
+
+    @GetMapping("/{diaryId}")
+    public ResponseEntity<?> readDiary(@PathVariable Long diaryId) {
+        return ResponseEntity.ok().body(diaryService.readDiary(diaryId));
+    }
 }

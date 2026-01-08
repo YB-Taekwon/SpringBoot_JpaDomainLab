@@ -2,10 +2,15 @@ package com.ian.weatherdiary.service;
 
 import com.ian.weatherdiary.domain.Diary;
 import com.ian.weatherdiary.dto.request.DiaryCreateRequest;
+import com.ian.weatherdiary.dto.request.DiaryReadRequest;
+import com.ian.weatherdiary.dto.response.DiaryReadResponse;
 import com.ian.weatherdiary.dto.response.WeatherResponse;
 import com.ian.weatherdiary.repository.DiaryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -26,5 +31,17 @@ public class DiaryService {
                 .content(request.getContent())
                 .build()
         );
+    }
+
+    public List<DiaryReadResponse> readDiaries(LocalDate date) {
+        List<Diary> diaries = diaryRepository.findAllByDate(date);
+
+        return diaries.stream().map(DiaryReadResponse::from).toList();
+    }
+
+    public List<DiaryReadResponse> readDiaries(DiaryReadRequest request) {
+        List<Diary> diaries = diaryRepository.findAllByDateBetween(request.getStartDate(), request.getEndDate());
+
+        return diaries.stream().map(DiaryReadResponse::from).toList();
     }
 }

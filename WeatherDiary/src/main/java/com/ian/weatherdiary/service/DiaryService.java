@@ -3,22 +3,26 @@ package com.ian.weatherdiary.service;
 import com.ian.weatherdiary.domain.Diary;
 import com.ian.weatherdiary.dto.request.DiaryCreateRequest;
 import com.ian.weatherdiary.dto.request.DiaryReadRequest;
+import com.ian.weatherdiary.dto.request.DiaryUpdateRequest;
 import com.ian.weatherdiary.dto.response.DiaryReadResponse;
 import com.ian.weatherdiary.dto.response.WeatherResponse;
 import com.ian.weatherdiary.repository.DiaryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class DiaryService {
 
     private final DiaryRepository diaryRepository;
     private final OpenWeatherMapService openWeatherMapService;
 
+    @Transactional
     public void create(DiaryCreateRequest request) {
 
         WeatherResponse weather = openWeatherMapService.parseWeather();
@@ -46,9 +50,19 @@ public class DiaryService {
     }
 
     public DiaryReadResponse readDiary(Long diaryId) {
-        Diary diary = diaryRepository.findById(diaryId)
-                .orElseThrow(() -> new IllegalArgumentException("Diary not found"));
+        Diary diary = findDiaryById(diaryId);
 
         return DiaryReadResponse.from(diary);
+    }
+
+    @Transactional
+    public void update(Long diaryId, DiaryUpdateRequest request) {
+        Diary diary = findDiaryById(diaryId);
+        diary.updateContent(request.getContent());
+    }
+
+    private Diary findDiaryById(Long diaryId) {
+        return diaryRepository.findById(diaryId)
+                .orElseThrow(() -> new IllegalArgumentException("Diary not found"));
     }
 }

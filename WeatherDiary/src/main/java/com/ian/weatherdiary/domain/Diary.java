@@ -34,4 +34,8 @@ public class Diary {
 
     @Column(nullable = false)
     private String content;
+
+    public void updateContent(String content) {
+        this.content = content;
+    }
 }
